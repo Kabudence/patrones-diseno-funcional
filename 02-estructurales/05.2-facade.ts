@@ -11,10 +11,9 @@
  *
  * https://refactoring.guru/es/design-patterns/facade
  */
+import {COLORS} from "../helpers/colors";
 
-// !Tarea: Tarea: Sistema de Encendido de una Computadora con el Patrón Facade
 
-import { COLORS } from '../helpers/colors.ts';
 
 // 1. Clases del Subsistema
 
@@ -56,21 +55,33 @@ class Memory {
 }
 
 // 2. Clase Facade - ComputerFacade
+interface ComputerFecadeOptions{
+   cpu:CPU;
+   hardDrive:HardDrive;
+   memory:Memory;
+}
+
 
 class ComputerFacade {
-  // TODO: Agregar los atributos necesarios CPU, Memory y HardDrive
+    private cpu:CPU;
+    private hardDrive:HardDrive;
+    private memory:Memory;
 
   // TODO: Agregar el constructor para instanciar los atributos CPU, Memory y HardDrive
-  constructor() {}
+  constructor({cpu,hardDrive,memory}:ComputerFecadeOptions) {
+    this.cpu=cpu;
+    this.hardDrive=hardDrive;
+    this.memory=memory;
+  }
 
   startComputer(): void {
     console.log('\n%cIniciando la computadora...', COLORS.cyan);
 
-    // TODO: ejecutar las operaciones necesarias para encender la computadora
-    // 1. Cargar el sistema operativo en la memoria - memory.load(0, hardDrive.read(0, 1024))
-    // 2. Saltar a la posición de memoria 0 - cpu.jump(0)
-    // 3. Ejecutar las instrucciones del CPU - cpu.execute()
-
+    this.memory.load(0,"Iniciando memoria")
+    this.hardDrive.read(0, 1024)
+    this.cpu.jump(0)
+    this.cpu.execute()
+    
     console.log('Computadora lista para usar.\n');
   }
 
@@ -78,6 +89,9 @@ class ComputerFacade {
     console.log('\n%cApagando la computadora...', COLORS.red);
     console.log('Cerrando procesos y guardando datos...');
 
+    this.cpu.stopOperations()
+    this.memory.free()
+    this.hardDrive.close()
     // TODO: ejecutar las operaciones necesarias para apagar la computadora
     // 1. Detener las operaciones del CPU - cpu.stopOperations()
     // 2. Liberar la memoria - memory.free()
@@ -90,7 +104,11 @@ class ComputerFacade {
 // 3. Código Cliente para Usar la Facade
 // TODO: Aquí no hay nada que hacer, debe de encender la computadora y apagarla sin problemas
 function main() {
-  const computer = new ComputerFacade();
+  let cpu= new CPU;
+  let hardDrive= new HardDrive;
+  let memory= new Memory;
+  
+  const computer = new ComputerFacade({cpu,hardDrive,memory});
 
   // Encender la computadora usando la fachada
   computer.startComputer();

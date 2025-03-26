@@ -6,8 +6,8 @@
  * * Es útil cuando necesitamos una gran cantidad de objetos y queremos reducir
  * * la cantidad de memoria que utilizan.
  */
+import {COLORS} from "../helpers/colors";
 
-import { COLORS } from '../helpers/colors.ts';
 
 // 1. Clase que representa el tipo de bala - BulletType (Flyweight)
 class BulletType {
@@ -39,14 +39,14 @@ class BulletTypeFactory {
   private bulletTypes: Record<string, BulletType> = {};
 
   getBulletType(name: string, damage: number, color: string): BulletType {
-    // TODO: Implementar un método para obtener un tipo de bala
-    // Si no existe el tipo de bala, crearlo y guardarlo en la lista de tipos de bala
-    // Si existe el tipo de bala, devolverlo
+    if(!this.bulletTypes[name]) {
+      console.log(`Creando nueva bala con el nombre ${name}`);
+      
+      this.bulletTypes[name] =  new BulletType(name,damage,color);
+      
+    }
+    return this.bulletTypes[name];
 
-    // TODO: El key, debería de ser un identificador único para cada tipo de bala
-    // name-damage-color
-
-    throw new Error('Method not implemented.');
   }
 }
 

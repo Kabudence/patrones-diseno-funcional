@@ -10,8 +10,8 @@
  * https://refactoring.guru/es/design-patterns/proxy
  *
  */
+import {COLORS} from "../helpers/colors";
 
-import { COLORS } from '../helpers/colors.ts';
 
 // 1. Interfaz Document
 interface Document {
@@ -33,15 +33,25 @@ class ConfidentialDocument implements Document {
 
 // 3. Clase Proxy - DocumentProxy
 class DocumentProxy implements Document {
-  private document: ConfidentialDocument;
-
+  private document: Document;
+  private mustHaveRoles:string[];
+    
   // TODO: Implementar el constructor de la clase DocumentProxy
-
+  // TODO: private mustHaveRoles:string[];
+  constructor(document: Document,mustHaveRoles:string[]=[]) {
+    this.document = document;
+    this.mustHaveRoles = mustHaveRoles;
+    
+  }
   displayContent(user: User): void {
-    // TODO: Implementar la lógica para verificar si el usuario tiene permisos
-    // Sólo si es admin puede ver el contenido
-    // Caso contrario, mostrar un mensaje de acceso denegado:
-    // EJ: `%cAcceso denegado. ${user.getName()}, no tienes permisos suficientes para ver este documento.`,
+    
+    if(this.mustHaveRoles.includes(user.getRole())){
+      console.log(`Role valido para este contenido, Obteniendo información del documento...`);
+      this.document.displayContent(user);
+      return
+    }
+    else console.log(`Acceso denegado con rol ${user.getRole()}`);
+
   }
 }
 
@@ -70,7 +80,7 @@ function main() {
   const confidentialDoc = new ConfidentialDocument(
     'Este es el contenido confidencial del documento.'
   );
-  const proxy = new DocumentProxy(confidentialDoc);
+  const proxy = new DocumentProxy(confidentialDoc,[`user`,'admin']);
 
   const user1 = new User('Juan', 'user');
   const user2 = new User('Ana', 'admin');
