@@ -45,6 +45,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@deno-library/logger@*",
       "jsr:@std/assert@1"
     ]
   }

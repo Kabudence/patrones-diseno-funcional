@@ -12,7 +12,8 @@
  * https://refactoring.guru/es/design-patterns/abstract-factory
  */
 
-import { COLORS } from '../helpers/colors.ts';
+
+import {COLORS} from "../helpers/colors";
 
 /**
  *  El propósito del Abstract Factory es crear familias de objetos relacionados

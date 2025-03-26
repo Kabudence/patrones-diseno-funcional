@@ -21,33 +21,50 @@ interface Character {
 // 2. Clase BasicCharacter
 // Representa un personaje básico sin accesorios
 // TODO: Implementar la interfaz Character
-class BasicCharacter {
-  // TODO: Implementar los métodos de la interfaz
-  // getDescription: return 'Personaje básico';
-  // TODO: Implementar los métodos de la interfaz
-  // getStats: return { attack: 10, defense: 10 };
+class BasicCharacter implements Character {
+
+  getDescription(): string{
+    return `Personaje Basico`
+  }
+  getStats(): { attack: number; defense: number }{
+    return {
+      attack: 10,
+      defense: 10,
+    };
+  }
+  
+  
+
+
 }
 
 // 3. Clase Decoradora CharacterDecorator
 // Actúa como base para los decoradores específicos
 abstract class CharacterDecorator implements Character {
-  // Protected para que las clases hijas puedan acceder a la propiedad
-  // Private no permitiría que las clases hijas accedan a la propiedad
-  // TODO: Definir la propiedad protected character de tipo Character
+  
+  protected character: Character;
+  
+  constructor(wrapper:Character) {
+    this.character = wrapper;
+  }
 
-  // TODO: Definir el constructor que recibe un personaje de tipo Character
 
   // TODO: Implementar los métodos de la interfaz Character, pero retornando
   // la descripción y estadísticas del personaje decorado
   getDescription(): string {
-    throw new Error('Method not implemented.');
+    return this.character.getDescription();
+   
   }
 
   // TODO: Implementar los métodos de la interfaz Character
   getStats(): { attack: number; defense: number } {
-    throw new Error('Method not implemented.');
+  return this.character.getStats();
+  }
+   public removeDecorator(): Character {
+    return this.character;
   }
 }
+
 
 // 4. Decorador Concreto HelmetDecorator
 // Añade un casco que aumenta la defensa en +5
@@ -98,7 +115,7 @@ function main() {
   let character: Character = new BasicCharacter();
   console.log('\nPersonaje inicial:', character.getDescription());
   console.log('Estadísticas:', character.getStats());
-
+  
   // Añadir un casco al personaje
   character = new HelmetDecorator(character);
   console.log('\nCon Casco:', character.getDescription());
@@ -114,9 +131,15 @@ function main() {
   console.log('\nCon Espada:', character.getDescription());
   console.log('Estadísticas:', character.getStats());
 
-  character = new RingDecorator(character);
-  console.log('\nCon Anillo:', character.getDescription());
-  console.log('Estadísticas:', character.getStats());
+
+    character = (character as CharacterDecorator).removeDecorator();
+  console.log('\n', character.getDescription());
+
+
+
+  // character = new RingDecorator(character);
+  // console.log('\nCon Anillo:', character.getDescription());
+  // console.log('Estadísticas:', character.getStats());
 
   console.log('\n\n');
 }
